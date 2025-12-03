@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StaySafe | Hostel Management System</title>
+    <!-- Using Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    
+    <!-- Link to your CSS File -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Sidebar Navigation -->
+    <nav class="sidebar">
+        <div class="brand">
+            <i class="ph ph-house-line" style="font-size: 1.5rem;"></i>
+            <span>StaySafe Manager</span>
+        </div>
+        <ul class="nav-links">
+            <li class="nav-item active" onclick="showSection('dashboard')">
+                <i class="ph ph-squares-four"></i>
+                <span>Dashboard</span>
+            </li>
+            <li class="nav-item" onclick="showSection('allocation')">
+                <i class="ph ph-bed"></i>
+                <span>Allocation</span>
+            </li>
+            <li class="nav-item" onclick="showSection('rent')">
+                <i class="ph ph-currency-dollar"></i>
+                <span>Rent Tracker</span>
+            </li>
+            <li class="nav-item" onclick="showSection('complaints')">
+                <i class="ph ph-megaphone"></i>
+                <span>Complaints</span>
+            </li>
+            <li class="nav-item" onclick="showSection('visitors')">
+                <i class="ph ph-users"></i>
+                <span>Visitor Log</span>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+        <!-- DASHBOARD SECTION -->
+        <section id="dashboard" class="section active">
+            <header>
+                <h1>Dashboard Overview</h1>
+                <button class="btn btn-primary" onclick="resetData()">
+                    <i class="ph ph-arrow-counter-clockwise"></i> Reset Demo Data
+                </button>
+            </header>
+            
+            <div class="stats-grid">
+                <div class="card">
+                    <div class="card-title">Total Capacity</div>
+                    <div class="card-value" id="total-capacity">50 Beds</div>
+                </div>
+                <div class="card">
+                    <div class="card-title">Occupancy</div>
+                    <div class="card-value" style="color: var(--primary);" id="occupancy-rate">0%</div>
+                </div>
+                <div class="card">
+                    <div class="card-title">Vacant Beds</div>
+                    <div class="card-value" style="color: var(--success);" id="vacant-beds">50</div>
+                </div>
+                <div class="card">
+                    <div class="card-title">Pending Complaints</div>
+                    <div class="card-value" style="color: var(--danger);" id="pending-complaints">0</div>
+                </div>
+            </div>
+
+            <h3>Recent Activity</h3>
+            <div class="table-container" style="margin-top: 1rem;">
+                <table id="recent-activity-table">
+                    <thead>
+                        <tr>
+                            <th>Type</th>
+                            <th>Description</th>
+                            <th>Time</th>
+                        </tr>
+                    </thead>
+                    <tbody id="activity-log-body">
+                        <!-- Populated by JS -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- ALLOCATION SECTION -->
+        <section id="allocation" class="section">
+            <header>
+                <h1>Room Allocation</h1>
+            </header>
+            <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 2rem;">
+                <div class="card">
+                    <h3 style="margin-bottom: 1rem;">Add New Tenant</h3>
+                    <form id="allocation-form">
+                        <div class="form-group">
+                            <label>Full Name</label>
+                            <input type="text" id="tenant-name" class="form-input" required placeholder="John Doe">
+                        </div>
+                        <div class="form-group">
+                            <label>Phone Number</label>
+                            <input type="tel" id="tenant-phone" class="form-input" required placeholder="123-456-7890">
+                        </div>
+                        <div class="form-group">
+                            <label>Room Number</label>
+                            <input type="number" id="room-no" class="form-input" required placeholder="101">
+                        </div>
+                        <div class="form-group">
+                            <label>Rent Amount</label>
+                            <input type="number" id="rent-amount" class="form-input" required placeholder="5000">
+                        </div>
+                        <button type="submit" class="btn btn-primary" style="width: 100%">Allocate Room</button>
+                    </form>
+                </div>
+                
+                <div class="table-container">
+                    <table id="tenants-table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Room</th>
+                                <th>Joined Date</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tenants-body">
+                            <!-- Populated by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- RENT TRACKER SECTION -->
+        <section id="rent" class="section">
+            <header>
+                <h1>Rent Tracker</h1>
+            </header>
+            <div class="table-container">
+                <table id="rent-table">
+                    <thead>
+                        <tr>
+                            <th>Tenant</th>
+                            <th>Room</th>
+                            <th>Amount</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="rent-body">
+                        <!-- Populated by JS -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- COMPLAINTS SECTION -->
+        <section id="complaints" class="section">
+            <header>
+                <h1>Complaint Management</h1>
+            </header>
+            <div style="margin-bottom: 2rem;" class="card">
+                <form id="complaint-form" style="display: flex; gap: 1rem; align-items: flex-end;">
+                    <div class="form-group" style="flex: 1; margin-bottom: 0;">
+                        <label>Tenant Name</label>
+                        <select id="complaint-tenant" class="form-select" required>
+                            <option value="">Select Tenant</option>
+                        </select>
+                    </div>
+                    <div class="form-group" style="flex: 2; margin-bottom: 0;">
+                        <label>Issue Description</label>
+                        <input type="text" id="complaint-desc" class="form-input" required placeholder="e.g., Fan not working">
+                    </div>
+                    <button type="submit" class="btn btn-warning">Raise Ticket</button>
+                </form>
+            </div>
+
+            <div class="table-container">
+                <table id="complaints-table">
+                    <thead>
+                        <tr>
+                            <th>Ticket ID</th>
+                            <th>Tenant</th>
+                            <th>Issue</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="complaints-body">
+                        <!-- Populated by JS -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- VISITOR LOG SECTION -->
+        <section id="visitors" class="section">
+            <header>
+                <h1>Visitor Log</h1>
+            </header>
+            <div style="margin-bottom: 2rem;" class="card">
+                <form id="visitor-form" style="display: flex; gap: 1rem; align-items: flex-end; flex-wrap: wrap;">
+                    <div class="form-group" style="flex: 1;">
+                        <label>Visitor Name</label>
+                        <input type="text" id="visitor-name" class="form-input" required>
+                    </div>
+                    <div class="form-group" style="flex: 1;">
+                        <label>Meeting Whom</label>
+                        <input type="text" id="visitor-target" class="form-input" required>
+                    </div>
+                    <div class="form-group" style="flex: 1;">
+                        <label>Purpose</label>
+                        <input type="text" id="visitor-purpose" class="form-input" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Log Entry</button>
+                </form>
+            </div>
+
+            <div class="table-container">
+                <table id="visitors-table">
+                    <thead>
+                        <tr>
+                            <th>Visitor</th>
+                            <th>Host</th>
+                            <th>Purpose</th>
+                            <th>Time In</th>
+                            <th>Time Out</th>
+                        </tr>
+                    </thead>
+                    <tbody id="visitors-body">
+                        <!-- Populated by JS -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <div id="toast-container"></div>
+
+    <!-- Link to your JS File -->
+    <script src="script.js"></script>
+</body>
+</html>
